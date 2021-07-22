@@ -6,6 +6,7 @@ var Schema = mongoose.Schema;
 var golosinaSchema =Schema({
     name:String,
     direccion:String,
+    precio:Number,
     image:String,
 })
 
