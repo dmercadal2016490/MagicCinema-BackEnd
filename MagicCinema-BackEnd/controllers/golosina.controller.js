@@ -27,7 +27,7 @@ function addGolosina(req,res){
                         }else if(golosinaFound){
                             res.send({message: 'La golosina que quieres agregar ya existe'});
                         }else{
-                            params.name = golosina.name.toLowerCase();
+                            params.name = golosina.name;
                             params.descripcion = golosina.descripcion;
                             params.precio = golosina.precio;
 
@@ -62,8 +62,72 @@ function addGolosina(req,res){
     }
 }
 
+function updateGolosina(req, res){
+    let userId = req.params.idU;
+    let cineId = req.params.idC;
+    let golosinaId = req.params.idG;
+    let update = req.body;
+    if(userId != req.user.sub){
+        res.status(403).send({message: 'No tienes permisos para modificar una golosina'});
+    }else{
+        Golosina.findById(golosinaId, (err, golosinaFind)=>{
+            if(err){
+                return res.status(500).send({message: 'Error general'})
+            }else if(golosinaFind){
+                Cine.findOne({_id: cineId, golosinas: golosinaId}, (err, cineFind)=>{
+                    if(err){
+                        return res.status(500).send({message: 'Error genereal al buscar'})
+                    }else if(cineFind){
+                        Golosina.findByIdAndUpdate(golosinaId, update, {new:true}, (err, golosinaUpdate)=>{
+                            if(err){
+                                return res.status(500).send({message: 'Error genereal al buscar'})
+                            }else if(golosinaUpdate){
+                                return res.send({message: 'Golosina Actualizada', golosinaUpdate})
+                            }else{
+                                return res.status(404).send({messsage: 'Golosina no se actualizó'})
+                            }
+                        })
+                    }else{
+                        return res.status(404).send({message: 'No se encontro el cine'})
+                    }
+                })
+            }else{
+                return res.status(404).send({message: 'No se encontro la golosina'})
+            }
+        })
+    }
+}
 
+function deleteGolosina(req, res){
+    let userId = req.params.idU;
+    let cineId = req.params.idC;
+    let golosinaId = req.params.idG; 
+
+    if(userId != req.user.sub){
+        res.status(403).send({message: 'No tienes permisos para eliminar una golosina'});
+    }else{
+        Cine.findOneAndUpdate({_id: cineId, golosinas: golosinaId}, {$pull:{golosinas:golosinaId}}, {new: true}, (err, golosinaPull)=>{
+            if(err){
+                return res.status(500).send({message: 'Error general'})
+            }else if(golosinaPull){
+                Golosina.findByIdAndRemove(golosinaId, (err, golosinaRemove)=>{
+                    if(err){
+                        return res.status(500).send({message: 'Error general al eliminar golosina'})
+                    }else if(golosinaRemove){
+                        res.send({message: 'Golosina eliminada'})
+                    }else{
+                        return res.status(500).send({message: 'Golosina ya eliminada o no se pudo eliminar'})
+                    }
+                })
+            }else{
+                return res.status(500).send({message: 'No se pudo eliminar la golosina'})
+            }
+        })
+    }
+}
 
 module.exports ={
-    addGolosina
+    addGolosina,
+    updateGolosina,
+    deleteGolosina
 }

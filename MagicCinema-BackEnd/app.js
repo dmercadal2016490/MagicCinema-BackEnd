@@ -17,6 +17,6 @@ app.use(cors());
 
 app.use('/api', userRoutes);
 app.use('/api', cineRoutes);
-api.use('/api', golosinasRoutes);
+app.use('/api', golosinasRoutes);
 
 module.exports = app;
