@@ -27,9 +27,9 @@ function addGolosina(req,res){
                         }else if(golosinaFound){
                             res.send({message: 'La golosina que quieres agregar ya existe'});
                         }else{
-                            params.name = golosina.name;
-                            params.descripcion = golosina.descripcion;
-                            params.precio = golosina.precio;
+                            golosina.name = params.name.toLowerCase()
+                            golosina.descripcion =  params.descripcion
+                            golosina.precio  = params.precio;
 
                             golosina.save((err,golosinaSaved)=>{
                                 if(err){
