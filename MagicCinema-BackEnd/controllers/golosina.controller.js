@@ -62,6 +62,64 @@ function addGolosina(req,res){
     }
 }
 
+function uploadImageGolosina(req, res){
+    let userId = req.params.idU;
+    let golosinaId = req.params.idG;
+    let update = req.body;
+    var fileName;
+    
+    if(userId != req.user.sub){
+        res.status(403).send({message: 'No tienes los permisos para cambiar la foto de la golosina'})
+    }else{
+        if(req.files){
+            var filePath = req.files.image.path;
+        
+            var fileSplit = filePath.split('\\');
+            var fileName = fileSplit[2];
+
+            var extension = fileName.split('\.');
+            var fileExt = extension[1];
+            if( fileExt == 'png' ||
+                fileExt == 'jpg' ||
+                fileExt == 'jpeg' ||
+                fileExt == 'gif'){
+                    Golosina.findByIdAndUpdate(golosinaId, {image: fileName}, {new:true}, (err, golosinaUpdated)=>{
+                        if(err){
+                            res.status(500).send({message: 'Error general'});
+                        }else if(golosinaUpdated){
+                            res.send({golosina: golosinaUpdated, golosinaImage:golosinaUpdated.image});
+                        }else{
+                            res.status(400).send({message: 'No se ha podido actualizar'});
+                        }
+                    })
+                }else{
+                    fs.unlink(filePath, (err)=>{
+                        if(err){
+                            res.status(500).send({message: 'Extension no válida y error al eliminar archivo'})
+                        }else{
+                            res.send({message: 'Extensión no valida'})
+                        }
+                    })
+                }
+            }else{
+                res.status(400).send({message: 'No has enviado ninguna imagen para subir'})
+            }
+        }
+    }
+
+    function getImageGolosina(req, res){
+        var fileName = req.params.fileName;
+        var pathFile = './uploads/golosina/' + fileName;
+
+        fs.exists(pathFile, (exists)=>{
+            if(exists){
+                res.sendFile(path.resolve(pathFile));
+            }else{
+                res.status(404).send({message: 'Imagen no existe'})
+            }
+        })
+    }
+
 function updateGolosina(req, res){
     let userId = req.params.idU;
     let cineId = req.params.idC;
@@ -126,8 +184,24 @@ function deleteGolosina(req, res){
     }
 }
 
+function getGolosinas (req, res){
+    var cineId = req.params.idC;
+    Cine.findById(cineId).populate({path: 'golosinas', populate:{path:'cine'}}).exec((err, golosinas)=>{
+        if(err){
+            res.status(500).send({message: 'Error general al buscar golosinas'})
+        }else if(golosinas){
+            res.send({message: 'Golosinas: ', golosinas})
+        }else{
+            res.send({message: 'No existe'})
+        }
+    })
+}
+
 module.exports ={
     addGolosina,
     updateGolosina,
-    deleteGolosina
+    deleteGolosina,
+    uploadImageGolosina,
+    getGolosinas,
+    getImageGolosina
 }
