@@ -9,6 +9,7 @@ var peliculaSchema = Schema({
     clasificacion:String,
     categoria:String,
     estado:String,
+    fechaEstreno:String,
     image:String,
     asientos:[{}]
 });

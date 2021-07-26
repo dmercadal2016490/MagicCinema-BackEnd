@@ -32,6 +32,7 @@ function addMovie(req,res){
                             pelicula.clasificacion  = params.clasificacion;
                             pelicula.categoria  = params.categoria;
                             pelicula.estado  = params.estado;
+                            palicula.fechaEstreno = params.fechaEstreno;
 
                             pelicula.save((err,peliculaSaved)=>{
                                 if(err){
