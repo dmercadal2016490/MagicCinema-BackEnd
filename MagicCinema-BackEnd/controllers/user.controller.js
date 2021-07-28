@@ -328,6 +328,19 @@ function getUsers(req,res){
     })
 }
 
+function getAdmins(req,res){
+    User.find({role: "ROLE_ADMIN"}).exec((err, users)=>{
+        if(err){
+            res.status(500).send({message: 'Error general al buscar usuarios'});
+            console.log(err)
+        }else if(users){
+            res.send({message: 'Usuarios encontrados: ', users})
+        }else{
+            res.send({message: 'No existe ningun usuario'})
+        }
+    })
+}
+
 
 module.exports = {
     createInit,
@@ -338,5 +351,6 @@ module.exports = {
     deleteUser,
     uploadImage,
     getImage,
-    getUsers
+    getUsers,
+    getAdmins,
 }    
