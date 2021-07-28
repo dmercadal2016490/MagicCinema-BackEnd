@@ -7,6 +7,7 @@ var cineSchema =Schema({
     name:String,
     direccion:String,
     image:String,
+    admin: [{type: Schema.ObjectId, ref: 'user'}],
     peliculas:[{type: Schema.ObjectId, ref: 'pelicula'}],
     golosinas:[{type: Schema.ObjectId, ref: 'golosina'}]
 })

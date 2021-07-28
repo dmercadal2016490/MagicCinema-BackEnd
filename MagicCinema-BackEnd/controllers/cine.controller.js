@@ -13,28 +13,33 @@ function addCine(req,res){
     if(userId != req.user.sub){
         res.status(403).send({message: 'No tienes permisos para crear un cine'});
     }else{
-        Cine.findOne({name:params.name}, (err, cineFind)=>{
-            if(err){
-                res.status(500).send({message:'Error general'});
-                console.log(err);
-            }else if(cineFind){
-                res.send({message:  'El cine que quieres agregar ya existe'});
-            }else{
-                cine.name = params.name;
-                cine.direccion = params.direccion;
-
-                cine.save((err,cineSaved)=>{
-                    if(err){
-                        res.status(500).send({message: 'Error general al salvar el cine'});
-                        console.log(err)
-                    }else if(cineSaved){
-                        res.send({message:'Cine guardado con exito', cineSaved});
-                    }else{
-                        res.send({message:'No se guardo el cine'});
-                    }
-                })
-            }
-        })
+        if(params.name && params.direccion && params.admin){
+            Cine.findOne({name:params.name}, (err, cineFind)=>{
+                if(err){
+                    res.status(500).send({message:'Error general'});
+                    console.log(err);
+                }else if(cineFind){
+                    res.send({message:  'El cine que quieres agregar ya existe'});
+                }else{
+                    cine.name = params.name;
+                    cine.direccion = params.direccion;
+                    cine.admin = params.admin;
+    
+                    cine.save((err,cineSaved)=>{
+                        if(err){
+                            res.status(500).send({message: 'Error general al salvar el cine'});
+                            console.log(err)
+                        }else if(cineSaved){
+                            res.send({message:'Cine guardado con exito', cineSaved});
+                        }else{
+                            res.send({message:'No se guardo el cine'});
+                        }
+                    })
+                }
+            }).populate('admin')
+        }else{
+            return res.status(500).send({message: 'Ingresa los datos completos'})
+        }
     }
 }
 
@@ -157,15 +162,23 @@ function deleteCine(req,res){
 }
 
 function getCines(req,res){
-    Cine.find({}).exec((err, cines)=>{
-        if(err){
-            res.status(500).send({message: 'Error general el buscar los cines'});
-        }else if(cines){
-            res.send({message: 'Cines encontrados: ', cines})
-        }else{
-            res.send({message: 'No existen cines en la base de datos'});
-        }
-    }).pupulate('peliculas').populate('golosinas');
+        Cine.find().populate({
+            path: 'cine',
+            populate:{
+                path: 'peliculas',
+                path: 'admin',
+                path: 'golosinas',
+            }
+        }).exec((err, cines)=>{
+            if(err){
+                res.status(500).send({message: 'Error general el buscar los cines'});
+            }else if(cines){
+                res.send({message: 'Cines encontrados: ', cines})
+            }else{
+                res.send({message: 'No existen cines en la base de datos'});
+            }
+        });
+    
 }
 
 module.exports ={

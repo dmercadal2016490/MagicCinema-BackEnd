@@ -329,16 +329,22 @@ function getUsers(req,res){
 }
 
 function getAdmins(req,res){
-    User.find({role: "ROLE_ADMIN"}).exec((err, users)=>{
-        if(err){
-            res.status(500).send({message: 'Error general al buscar usuarios'});
-            console.log(err)
-        }else if(users){
-            res.send({message: 'Usuarios encontrados: ', users})
-        }else{
-            res.send({message: 'No existe ningun usuario'})
-        }
-    })
+    var adminId = req.params.idA;
+
+    if(adminId != req.user.sub){
+        res.status(403).send({message: 'No tienes permisos para realizar esta acción'});
+    }else{
+        User.find({role: "ROLE_ADMINCINE"}).exec((err, users)=>{
+            if(err){
+                res.status(500).send({message: 'Error general al buscar usuarios'});
+                console.log(err)
+            }else if(users){
+                res.send({message: 'Usuarios encontrados: ', users})
+            }else{
+                res.send({message: 'No existe ningun usuario'})
+            }
+        })
+    }
 }
 
 
