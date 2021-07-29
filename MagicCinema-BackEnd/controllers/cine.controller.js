@@ -107,7 +107,7 @@ function updateCine(req,res){
     var params = req.body;
 
     if(userId != req.user.sub){
-        res.status(403).send({message: 'No tienes permisos para actualizar un cine'});
+        res.status(403).send({message: 'No tienes permisos para actualizar este cine'});
     }else{
         Cine.findOne({name: params.name.toLowerCase()}, (err,cineFound)=>{
             if(err){
@@ -147,13 +147,13 @@ function deleteCine(req,res){
     var cineId = req.params.idC;
 
     if(userId != req.user.sub){
-        res.status(403).send({message: 'No tienes permisos para actualizar un cine'});
+        res.status(403).send({message: 'No tienes permisos para eliminar un cine'});
     }else{
         Cine.findByIdAndRemove(cineId, (err,cineRemoved)=>{
             if(err){
                 res.status(500).send({message: 'Error general al eliminar el cine'})
             }else if(cineRemoved){
-                res.send({message: 'El cine ha sido eliminado'})
+                res.send({message: 'El cine ha sido eliminado', cineRemoved})
             }else{
                 res.status(404).send({message: 'El cine que quieres eliminar no existe'})
             }

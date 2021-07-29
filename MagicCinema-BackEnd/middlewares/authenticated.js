@@ -32,3 +32,13 @@ exports.ensureAuthAdmin = (req, res, next)=>{
        return next(); 
     }
 }
+
+exports.ensureAuthAdminCine = (req, res, next)=>{
+    var payload = req.user;
+        
+    if(payload.role != 'ROLE_ADMINCINE'){
+        return res.status(404).send({message: 'No tienes permiso para ingresar a esta ruta'})
+    }else{
+       return next(); 
+    }
+}
