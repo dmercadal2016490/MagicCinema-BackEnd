@@ -203,11 +203,27 @@ function getMovies(req,res){
     })
 }
 
+function getMoviees(req,res){
+    var cineId = req.params.idC;
+
+    Cine.findById(cineId).populate({path:'peliculas', populate:{path:'cine'}}).exec((err, peliculas)=>{
+        if(err){
+            res.status(500).send({message:'Error general'});
+            console.log(err);
+        }else if(peliculas){
+            res.send({message:'Peliculas: ',peliculas})
+        }else{
+            res.send({message: 'No hay peliculas'})
+        }
+    })
+}
+
 module.exports ={
     addMovie,
     updateMovie,
     deleteMovie,
     uploadImageMovie,
     getImageMovie,
-    getMovies
+    getMovies,
+    getMoviees
 }

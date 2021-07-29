@@ -67,6 +67,7 @@ function uploadImageCine(req, res){
                     Cine.findByIdAndUpdate(cineId, {image: fileName}, {new:true}, (err, cineUpdated)=>{
                         if(err){
                             res.status(500).send({message: 'Error general'});
+                            console.log(err);
                         }else if(cineUpdated){
                             res.send({cine: cineUpdated, cineImage:cineUpdated.image});
                         }else{
