@@ -14,4 +14,4 @@ var peliculaSchema = Schema({
     asientos:[{}]
 });
 
-module.exports = mongoose.model('peliculas', peliculaSchema);
+module.exports = mongoose.model('pelicula', peliculaSchema);

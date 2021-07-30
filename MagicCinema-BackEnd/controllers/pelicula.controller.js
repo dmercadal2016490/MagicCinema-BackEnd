@@ -32,7 +32,6 @@ function addMovie(req,res){
                             pelicula.clasificacion  = params.clasificacion;
                             pelicula.categoria  = params.categoria;
                             pelicula.estado  = params.estado;
-                            palicula.fechaEstreno = params.fechaEstreno;
 
                             pelicula.save((err,peliculaSaved)=>{
                                 if(err){
@@ -203,17 +202,16 @@ function getMovies(req,res){
     })
 }
 
-function getMoviees(req,res){
+function getMoviees (req, res){
     var cineId = req.params.idC;
-
-    Cine.findById(cineId).populate({path:'peliculas', populate:{path:'cine'}}).exec((err, peliculas)=>{
+    Cine.findById(cineId).populate({path: 'peliculas', populate:{path:'cine'}}).exec((err, peliculas)=>{
         if(err){
-            res.status(500).send({message:'Error general'});
+            res.status(500).send({message: 'Error general al buscar peliculas', err});
             console.log(err);
         }else if(peliculas){
-            res.send({message:'Peliculas: ',peliculas})
+            res.send({message: 'peliculas: ', peliculas})
         }else{
-            res.send({message: 'No hay peliculas'})
+            res.send({message: 'No existe'})
         }
     })
 }
