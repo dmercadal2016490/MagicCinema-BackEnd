@@ -10,7 +10,7 @@ var api = express.Router();
 
 api.post('/:idU/addCine', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], cineController.addCine);
 api.put('/:idU/updateCine/:idC', [mdAuth.ensureAuth, mdAuth.ensureAuthAdminCine], cineController.updateCine);
-api.delete('/:idU/deleteCine/:idC', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmin], cineController.deleteCine);
+api.delete('/:idU/deleteCine/:idC', cineController.deleteCine);
 api.get('/getCines', [mdAuth.ensureAuth],cineController.getCines);
 
 //Imagen

@@ -147,9 +147,6 @@ function deleteCine(req,res){
     var userId = req.params.idU;
     var cineId = req.params.idC;
 
-    if(userId != req.user.sub){
-        res.status(403).send({message: 'No tienes permisos para eliminar un cine'});
-    }else{
         Cine.findByIdAndRemove(cineId, (err,cineRemoved)=>{
             if(err){
                 res.status(500).send({message: 'Error general al eliminar el cine'})
@@ -159,7 +156,6 @@ function deleteCine(req,res){
                 res.status(404).send({message: 'El cine que quieres eliminar no existe'})
             }
         })
-    }
 }
 
 function getCines(req,res){
