@@ -11,7 +11,7 @@ var peliculaSchema = Schema({
     estado:String,
     fechaEstreno:String,
     image:String,
-    asientos:[{}]
+    asientos:[{type: Schema.ObjectId, ref: 'asiento'}]
 });
 
 module.exports = mongoose.model('pelicula', peliculaSchema);

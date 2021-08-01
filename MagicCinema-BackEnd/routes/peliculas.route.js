@@ -13,6 +13,7 @@ api.put('/:idU/updateMovie/:idC/:idM', [mdAuth.ensureAuth, mdAuth.ensureAuthAdmi
 api.delete('/:idU/deleteMovie/:idC/:idM', [mdAuth.ensureAuth, mdAuth.ensureAuthAdminCine], peliculaController.deleteMovie);
 api.get('/getMovies', peliculaController.getMovies);
 api.get('/getMoviees/:idC', peliculaController.getMoviees);
+api.get('/getAsientos/:idP', peliculaController.getAsientos);
 
 //Imagen
 api.put('/:id/uploadImageMovie/:idP', [mdAuth.ensureAuth,mdAuth.ensureAuthAdminCine,upload], peliculaController.uploadImageMovie);

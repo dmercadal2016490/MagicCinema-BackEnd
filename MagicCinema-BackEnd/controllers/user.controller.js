@@ -23,6 +23,7 @@ function createInit(req, res){
                 }else if(passwordHash){
                     user.username = 'admin';
                     user.password = passwordHash;
+
                     user.save((err, userSaved)=>{
                         if(err){
                             console.log('Error al crear el usuario', err)
