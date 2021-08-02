@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var reservacionSchema = Schema({
-    fecha:Date,
+    fecha:String,
     numeroTarjeta:Number,
     precio:Number,
     asiento:[{type: Schema.ObjectId, ref: 'asiento'}]

@@ -58,6 +58,7 @@ function addMovie(req,res){
                             pelicula.clasificacion  = params.clasificacion;
                             pelicula.categoria  = params.categoria;
                             pelicula.estado  = params.estado;
+                            pelicula.precio = "30";
 
                             pelicula.save((err,peliculaSaved)=>{
                                 if(err){

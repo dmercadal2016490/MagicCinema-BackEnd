@@ -3,6 +3,7 @@
 var Reservacion = require('../models/reservacion.model')
 var Asiento = require('../models/asiento.model')
 var User = require('../models/user.model')
+var Pelicula = require('../models/pelicula.model')
 
 function reservarAsiento(req, res){
     var userId = req.params.idU;
@@ -10,14 +11,15 @@ function reservarAsiento(req, res){
     var params = req.body;
     var reservacion = new Reservacion();
     var asiento = new Asiento();
+    var pelicula = new Pelicula();
 
     if(userId != req.user.sub){
         return res.send({message: 'No tienes permiso para realizar esta acción'})
     }else{
-        if(params.fecha && params.numeroTarjeta && params.precio){
+        if(params.fecha && params.numeroTarjeta){
             reservacion.fecha = params.fecha;
             reservacion.numeroTarjeta = params.numeroTarjeta;
-            reservacion.precio = params.precio;
+            reservacion.precio = 30;
             reservacion.asiento = asientoId;
 
             reservacion.save((err, reservacionSaved)=>{

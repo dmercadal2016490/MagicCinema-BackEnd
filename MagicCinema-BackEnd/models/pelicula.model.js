@@ -9,6 +9,7 @@ var peliculaSchema = Schema({
     clasificacion:String,
     categoria:String,
     estado:String,
+    precio:Number,
     fechaEstreno:String,
     image:String,
     asientos:[{type: Schema.ObjectId, ref: 'asiento'}]
